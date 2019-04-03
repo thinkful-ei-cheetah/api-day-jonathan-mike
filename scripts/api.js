@@ -28,9 +28,23 @@ const api = (function(){
 
   };
 
+  const updateItem = function (id, updateData){
+
+    return fetch(BASE_URL+'/items/'+id, {
+      // eslint-disable-next-line quotes
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateData)
+    });
+
+  };
+
   return {
     getItems,
-    createItem
+    createItem,
+    updateItem
   };
 
 }());
