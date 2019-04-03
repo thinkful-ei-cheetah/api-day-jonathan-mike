@@ -12,17 +12,18 @@ const api = (function(){
   };
 
   const createItem = function (name){
-      const newItem = {
-        name: name
-      };
+    const newItem = {
+      name: name
+    };
 
-      return fetch(BASE_URL+'/items', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newItem)
-      });
+    return fetch(BASE_URL+'/items', {
+      // eslint-disable-next-line quotes
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newItem)
+    });
 
 
   };
