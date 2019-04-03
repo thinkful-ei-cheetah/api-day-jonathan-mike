@@ -1,4 +1,5 @@
 'use strict';
+/* global store */
 
 const api = (function(){
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/mike-jonathan';
@@ -39,7 +40,7 @@ const api = (function(){
   
         // Otherwise give back the data as resolved Promise
         return data;
-      })
+      });
   }
 
 
@@ -48,7 +49,7 @@ const api = (function(){
     const newItem={name:name};
     return listApiFetch(BASE_URL + '/items',  
       {
-        method: "POST",
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },

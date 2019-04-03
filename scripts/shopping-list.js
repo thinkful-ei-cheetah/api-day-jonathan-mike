@@ -127,13 +127,13 @@ const shoppingList = (function(){
     
       //console.log(itemToEdit)
       api.updateItem(id, {name: itemName})
-      .then((newItem) => {
-        store.findAndUpdate(id, {name: itemName});
-        render();
-      }).catch(err => {
-        store.setError(err.message);
-        render();
-      });
+        .then((newItem) => {
+          store.findAndUpdate(id, {name: itemName});
+          render();
+        }).catch(err => {
+          store.setError(err.message);
+          render();
+        });
     });
   }
   
