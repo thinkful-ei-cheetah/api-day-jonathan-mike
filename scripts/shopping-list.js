@@ -43,6 +43,9 @@ const shoppingList = (function(){
   
   function render() {
     // Filter item list if store prop is true by item.checked === false
+
+    $('.shopping-list-error').html('');
+
     let items = [ ...store.items ];
     if (store.hideCheckedItems) {
       items = items.filter(item => !item.checked);
@@ -59,8 +62,10 @@ const shoppingList = (function(){
   
     // insert that HTML into the DOM
     $('.js-shopping-list').html(shoppingListItemsString);
+    if(store.error) {
+      $('.shopping-list-error').html(store.error);
+    }
   }
-  
   
   function handleNewItemSubmit() {
     $('#js-shopping-list-form').submit(function (event) {
@@ -68,9 +73,11 @@ const shoppingList = (function(){
       const newItemName = $('.js-shopping-list-entry').val();
       $('.js-shopping-list-entry').val('');
       api.createItem(newItemName)
-        .then(res => res.json())
         .then((newItem) => {
           store.addItem(newItem);
+          render();
+        }).catch(err => {
+          store.setError(err.message);
           render();
         });
     });
@@ -84,14 +91,16 @@ const shoppingList = (function(){
   
   function handleItemCheckClicked() {
     $('.js-shopping-list').on('click', '.js-item-toggle', event => {
+      event.preventDefault();
       const id = getItemIdFromElement(event.currentTarget);
       const itemToCheck = store.findById(id);
       api.updateItem(id, {checked: !itemToCheck.checked})
-        .then(response => {
-          if (response.ok) {
-            store.findAndUpdate(id, {checked: !itemToCheck.checked});
-            render();
-          }   
+        .then((newItem) => {
+          store.findAndUpdate(id, {checked: !itemToCheck.checked});
+          render();
+        }).catch(err => {
+          store.setError(err.message);
+          render();
         });
     });
   }
@@ -100,11 +109,12 @@ const shoppingList = (function(){
     $('.js-shopping-list').on('click', '.js-item-delete', event => {
       const id = getItemIdFromElement(event.currentTarget);
       api.deleteItem(id)
-        .then(response => {
-          if (response.ok) {
-            store.findAndDelete(id);
-            render();
-          }   
+        .then((newItem) => {
+          store.findAndDelete(id);
+          render();
+        }).catch(err => {
+          store.setError(err.message);
+          render();
         });
     });
   }
@@ -114,14 +124,16 @@ const shoppingList = (function(){
       event.preventDefault();
       const id = getItemIdFromElement(event.currentTarget);
       const itemName = $(event.currentTarget).find('.shopping-item').val();
-
-      api.updateItem(id, itemName)
-        .then(response => {
-          if (response.ok) {
-            store.findAndUpdate(id, itemName);
-            render();
-          }   
-        });
+    
+      //console.log(itemToEdit)
+      api.updateItem(id, {name: itemName})
+      .then((newItem) => {
+        store.findAndUpdate(id, {name: itemName});
+        render();
+      }).catch(err => {
+        store.setError(err.message);
+        render();
+      });
     });
   }
   
