@@ -28,6 +28,19 @@ const api = (function(){
 
   };
 
+  const deleteItem = function (id){
+
+    return fetch(BASE_URL+'/items/'+id, {
+      // eslint-disable-next-line quotes
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+
+  };
+
   const updateItem = function (id, updateData){
 
     return fetch(BASE_URL+'/items/'+id, {
@@ -44,6 +57,7 @@ const api = (function(){
   return {
     getItems,
     createItem,
+    deleteItem,
     updateItem
   };
 
